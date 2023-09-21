@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -24,8 +26,10 @@ public class UserService implements IUserService{
     public List<UserVO> getAllUsers() {
 
         return userRepository.findAll().stream()
+                .filter(user -> (user.getIsAdmin() == 0 && user.getIsActive()==1))
                 .sorted(Comparator.comparingLong(User::getId))
-                .map(UserToUserVOMappingProfile::map).collect(Collectors.toList());
+                .map(UserToUserVOMappingProfile::map)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -58,9 +62,16 @@ public class UserService implements IUserService{
     @Override
     public Boolean deleteUser(Long userId) {
         //Todo : Tomorrow morning
-        User user = userRepository.findById(userId).get();
-        user.setIsActive(0);
-        //user.setUsername();
-        return null;
+        try{
+            LocalDateTime date = LocalDateTime.now();
+            User user = userRepository.findById(userId).get();
+            user.setIsActive(0);
+            user.setUsername(user.getUsername()+"_deleted_"+date);
+            user.setEmail(user.getEmail()+"_deleted_"+date);
+            userRepository.save(user);
+            return true;
+        }catch(NoSuchElementException e){
+            return false;
+        }
     }
 }
