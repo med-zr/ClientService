@@ -49,6 +49,8 @@ public class UserService implements IUserService{
     }
 
     public UserVO createUser(User user){
+        LocalDateTime date = LocalDateTime.now();
+        user.setCreateDate(date);
         User createdUser = userRepository.save(user);
 
         return UserToUserVOMappingProfile.map(user);
@@ -56,6 +58,8 @@ public class UserService implements IUserService{
 
     @Override
     public UserVO updateUser(User user) {
+        LocalDateTime date = LocalDateTime.now();
+        user.setEditDate(date);
         return UserToUserVOMappingProfile.map(userRepository.save(user));
     }
 
@@ -65,9 +69,10 @@ public class UserService implements IUserService{
         try{
             LocalDateTime date = LocalDateTime.now();
             User user = userRepository.findById(userId).get();
+            user.setEditDate(date);
             user.setIsActive(0);
-            user.setUsername(user.getUsername()+"_deleted_"+date);
-            user.setEmail(user.getEmail()+"_deleted_"+date);
+            user.setUsername(user.getUsername()+"_deleted");
+            user.setEmail(user.getEmail()+"_deleted");
             userRepository.save(user);
             return true;
         }catch(NoSuchElementException e){

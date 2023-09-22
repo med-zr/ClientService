@@ -1,6 +1,6 @@
 package org.operationsix.ClientService.models;
 
-
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +26,10 @@ public class User {
     private String password;
     @Column(nullable = false)
     private int isAdmin;
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "integer default 1")
     private int isActive;
-
+    @Column(length = 30,nullable = true)
+    private LocalDateTime editDate;
+    @Column(length = 30,nullable = true)
+    private LocalDateTime createDate;
 }
