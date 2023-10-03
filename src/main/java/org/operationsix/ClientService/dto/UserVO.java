@@ -12,7 +12,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class UserVO {
-    private String username;
+    private String userName;
     private String email;
-    private int isActive;
+    private boolean isActive;
+    private boolean isAdmin;
 }

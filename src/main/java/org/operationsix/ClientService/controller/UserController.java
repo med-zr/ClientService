@@ -31,7 +31,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping("/byId")
+    @GetMapping("/byIdUser")
     @ResponseStatus(HttpStatus.OK)
     public UserVO userById(@RequestParam(name = "id") Long id){
         return userService.getUserById(id);
@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping("/byUsername")
     @ResponseStatus(HttpStatus.OK)
     public UserVO userByUsername(@RequestParam(name = "username") String username){
-        return userService.getUserByUsername(username);
+        return userService.getUserByUserName(username);
     }
 
     @PutMapping("/update")
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<String> deleteUser(@RequestParam(name = "id") Long id){
+    public ResponseEntity<String> deleteUser(@RequestParam(name = "id") Long id) throws NoSuchFieldException{
         return userService.deleteUser(id)? ResponseEntity.status(HttpStatus.OK).body("User : "+id+" has been successfully deleted"):ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error in deletion : User not found");
     }
 }
